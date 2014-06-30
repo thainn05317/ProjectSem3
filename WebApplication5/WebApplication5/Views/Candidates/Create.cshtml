@@ -1,0 +1,131 @@
+﻿@model WebApplication5.Models.Candidate
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+<h2>Create</h2>
+<hr />
+@using (Html.BeginForm("Create", "Candidates", FormMethod.Post, new { data_abide = "" }))
+{
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>Personal Detail</legend>
+        <div class="row">
+            <div class="large-6 columns">
+                <label>Full Name:</label>
+                @Html.TextBoxFor(m => m.Name, new { required = "" })
+                <small class="error">Name is required</small>
+            </div>
+            <div class="large-6 columns">
+                <label>Email:</label>
+                @Html.TextBoxFor(m => m.Email, new { type = "email", required = "" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { style = "color:red" })
+                <small class="error">Email is not valid and required</small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 columns">
+                <label>Telephone:</label>
+                @Html.TextBoxFor(m => m.Phone, new { required = "", pattern = "phonenumber" })
+                <small class="error">Phone is required and should not contain characters</small>
+            </div>
+            <div class="large-6 columns">
+                <label>Birthday:</label>
+                @Html.TextBoxFor(m => m.Birthday, new { type = "text", required = "", @readonly = "readonly" })
+                <small class="error">Birthday is required</small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 columns">
+                <label>Gender:</label>
+                <input name="Gender" value="true" id="GenderTrue" type="radio" checked="checked" /><label for="GenderTrue">Male</label>
+                <input name="Gender" value="false" id="GenderFalse" type="radio" /><label for="GenderFalse">Female</label>
+            </div>
+            <div class="large-6 columns">
+                <label>Assign Exam Date:</label>
+                <input type="text" id="DateAssigned" name="DateAssigned" required readonly="readonly">
+                <small class="error">Birthday is required</small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <label>Home Address:</label>
+                @Html.EditorFor(m => m.HomeAddress, new { htmlAttributes = new { required = "" } })
+                <small class="error">Address is required</small>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Work Detail</legend>
+        <div class="row">
+            <div class="large-12 columns">
+                <label>Education History:</label>
+                @Html.TextAreaFor(m => m.Education, new { rows = "8", required = "" })
+                <small class="error">Education required</small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-12 columns">
+                <label>Work Experience:</label>
+                @Html.TextAreaFor(m => m.WorkExperience, new { rows = "8", required = "" })
+                <small class="error">Work expericence required</small>
+            </div>
+        </div>
+    </fieldset>
+    <div class="row">
+        <div class="large-6 columns">
+            <a href="/Candidates/Index/" class="small button">Back to List</a>
+        </div>
+        <div class="large-6 columns">
+            <input type="submit" class="small button right" value="Submit" />
+        </div>
+    </div>
+}
+
+@section Validation{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}
+@section AutoCompleteJs{
+    <script src="~/Scripts/jquery-ui-1.10.4.custom.min.js"></script>
+}
+@section AutoCompleteCss{
+    <link href="~/Content/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
+}
+@section DatePicker{
+    <script>
+        $(function () {
+            $("#Birthday").datepicker({
+                showAnim: "slideDown",
+                changeMonth: true,
+                changeYear: true,
+                maxDate: new Date(),
+                yearRange: '1970:2014',
+            });
+        });
+    </script>
+    <script>
+        $(function () {
+            $('#DateAssigned').datepicker({
+                showAnim: 'slideDown',
+                minDate: new Date()
+            });
+        });
+    </script>
+}
+@section DataAbide{
+    <script>
+        $(document)
+          .foundation({
+              abide: {
+                  patterns: {
+                      phonenumber: /^[0-9]+$/,
+                  }
+              }
+          });
+    </script>
+}
+
+

@@ -1,0 +1,41 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_HomeLayoutPage.cshtml";
+}
+
+
+<div class="row">
+    <div class="large-12 columns">
+        <h2>Login</h2>
+        @if (ViewBag.ErrorMsg != null)
+        {
+            <h5>@ViewBag.ErrorMsg</h5>
+        }
+        <hr />
+    </div>
+</div>
+@using (Html.BeginForm("Login", "HomePage", new { returnUrl = @ViewBag.ReturnUrl }, FormMethod.Post, new { data_abide = "" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="large-6 columns end">
+            <label>User Name:</label>
+            <input type="text" id="lvm.UserName" name="lvm.UserName" value="" required />
+            <small class="error">User Name is required</small>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-6 columns end">
+            <label>Password:</label>
+            <input type="password" id="lvm.Password" name="lvm.Password" value="" required />
+            <small class="error">Password is required</small>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            <input type="submit" value="Login" class="small button" />
+        </div>
+    </div>
+}
+
+

@@ -1,0 +1,43 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_HomeLayoutPage.cshtml";
+}
+<div class="row">
+    <div class="large-12 columns">
+        <h2>Welcome to the Webster Aptitude Online Exam</h2>
+        <hr />
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="large-12 columns">
+        <h3>Rules</h3>
+        <h6>
+            The Aptitude test is divided three parts:
+            <br />
+            <b> General Knowledge</b>
+            <br />
+            <b>Mathematics</b>
+            <br />
+            <b>Computer Technology</b>
+            <br />
+            The test is conducted in a linear mode, you should try to answer all questions to get the best score. The first part is General Knowledge which containts questions of social problems, history and others. The next one is Mathematics which tests your intelligence and responsiveness. Finally, Computer Technology will test you against the knowledge about computer programming and fundamental of computer system.
+            If you get more than 20 marks, you will be moved to the HR round, further contact will be made as soon as possible. Otherwise, do not try to make any attempt to re-register to do the test again because we keep track of your information and the question bank is huge and changes instantly.
+        </h6>
+    </div>
+</div>
+<div class="row">
+    <div class="large-12 columns">
+        <a href="#" data-reveal-id="firstModal" class="button small right">Proceed to the Exam</a>
+        <div id="firstModal" class="reveal-modal" data-reveal>
+            <h2>Notice</h2>
+            <p>Each part contains 5 questions with a total mark of 15 scores per part. The total mark of the exam is 45</p>
+            <p>The time for each round is 5 minutes, you will see a clock on the top of the page showing time left, when time out the test will be automatically sent</p>
+            <p>You will know your result after the Computer Technology is submitted, you cannot go back the previous test. Try to do so or refresh your browswer will make you failed the exam</p>
+            <a class="close-reveal-modal">&#215;</a>
+            @Html.ActionLink("Proceed to General Knowledge", "GeneralKnowledge", "Exam", null, new { @class = "small button" })
+        </div>
+    </div>
+</div>
+
+

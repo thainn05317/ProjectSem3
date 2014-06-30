@@ -1,0 +1,48 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<WebApplication5.Models.Answer>
+<div id="Sample">
+    <table class="responsive" style="width:100%">
+        <tr>
+            <th class="text-center">
+                @Ajax.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter }, new AjaxOptions { UpdateTargetId = "Sample", HttpMethod = "GET", InsertionMode = InsertionMode.Replace })
+            </th>
+            <th class="text-center">
+                @Ajax.ActionLink("Correct Choice", "Index", new { sortOrder = ViewBag.CorrectChoiceSortParm, currentFilter = ViewBag.CurrentFilter }, new AjaxOptions { UpdateTargetId = "Sample", HttpMethod = "GET", InsertionMode = InsertionMode.Replace })
+            </th>
+            <th class="text-center">
+                @Ajax.ActionLink("Question Name", "Index", new { sortOrder = ViewBag.QuestionNameSortParm, currentFilter = ViewBag.CurrentFilter }, new AjaxOptions { UpdateTargetId = "Sample", HttpMethod = "GET", InsertionMode = InsertionMode.Replace })
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td class="text-center" style="width:15%">
+                    @Html.DisplayFor(modelItem => item.IsRightAnswer)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Question.Name)
+                </td>
+                <td style="width:12%" class="text-center">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+                </td>
+            </tr>
+        }
+    </table>
+    <div class="row">
+        <div class="large-12 columns">
+            Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 large-centered columns">
+            @Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }), PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(new AjaxOptions() { HttpMethod = "GET", UpdateTargetId = "Sample" }))
+        </div>
+    </div>
+</div>

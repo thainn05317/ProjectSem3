@@ -1,0 +1,66 @@
+﻿@model WebApplication5.Models.ResultViewModel
+@{
+    ViewBag.Title = "Results";
+    Layout = "~/Views/Shared/_HomeLayoutPage.cshtml";
+}
+<div class="row">
+    <div class="large-12 columns">
+        <h2>Results</h2>
+        <hr />
+    </div>
+</div>
+<div class="row">
+    <div class="large-12 columns">
+        <ul>
+            <li>Candidate ID: @Model.Id</li>
+            <li>Name: @Model.Name</li>
+            <li>Total Score: @Model.Mark/45</li>
+            <li>Correct Questions: @Model.CorrectAnswer/15</li>
+            <li>Take on: @Model.DateTaken</li>
+            <li>
+                Detail:
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>General Knowledge</th>
+                            <th>Mathematics</th>
+                            <th>Computer Technology</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total Score</td>
+                            <td>@Model.GKMark</td>
+                            <td>@Model.MAMark</td>
+                            <td>@Model.CTMark</td>
+                        </tr>
+                        <tr>
+                            <td>Correct Answer</td>
+                            <td>@Model.GKCorrect</td>
+                            <td>@Model.MACorrect</td>
+                            <td>@Model.CTCorrect</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </li>
+            <li>
+                @if (@Model.Mark > 10)
+                {
+                    <h5>Congratulations, you have passed the test, see you soon in an interview</h5>
+                }
+                else
+                {
+                    <h5>
+                        You have not qualified for the job, thank you
+                    </h5>
+                }
+            </li>
+        </ul>
+
+
+
+    </div>
+</div>
+
+

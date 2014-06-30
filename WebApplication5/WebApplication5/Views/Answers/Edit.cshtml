@@ -1,0 +1,42 @@
+﻿@model WebApplication5.Models.Answer
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm("Edit", "Answers", FormMethod.Post, new { data_abide = "" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="large-12 columns">
+            <label>Answer:</label>
+            @Html.TextBoxFor(m => m.Name, new { required = "" })
+            <small class="error">Answer content is required</small>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            <label>Question:</label>
+            @Html.DropDownList("QuestionId")
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            <label>Right Answer:</label>
+            @Html.EditorFor(m => m.IsRightAnswer)
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            <input type="submit" value="Save" class="small button" />
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index", new { QuestionId = @Model.QuestionId })
+</div>

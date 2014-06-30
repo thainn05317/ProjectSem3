@@ -1,0 +1,197 @@
+﻿@using WebApplication5.Models
+@model List<WebApplication5.Models.ChartViewModel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    string database = @ViewBag.Data;
+}
+@helper Selected(string n, string m)
+{
+    if (n.Equals(m))
+    {
+        @:checked="checked"
+    }
+}
+@if (Model != null)
+{
+    @section HighChartJs{
+        <script src="http://code.highcharts.com/highcharts.js"></script>
+        <script src="http://code.highcharts.com/modules/exporting.js"></script>
+        <script src="http://canvg.googlecode.com/svn/trunk/rgbcolor.js"></script>
+        <script src="http://canvg.googlecode.com/svn/trunk/canvg.js"></script>
+        <script>
+            (function (H) {
+                H.Chart.prototype.createCanvas = function (divId) {
+                    var svg = this.getSVG(),
+                        width = parseInt(svg.match(/width="([0-9]+)"/)[1]),
+                        height = parseInt(svg.match(/height="([0-9]+)"/)[1]),
+                        canvas = document.createElement('canvas');
+                    canvas.setAttribute('width', width);
+                    canvas.setAttribute('height', height);
+                    if (canvas.getContext && canvas.getContext('2d')) {
+                        canvg(canvas, svg);
+                        var image = canvas.toDataURL("image/png")
+                            .replace("image/png", "image/octet-stream");
+                        window.location.href = image;
+                    } else {
+                        alert("Your browser doesn't support this feature, please use a modern browser");
+                    }
+                }
+            }(Highcharts));
+
+            $(function () {
+                $('#container').highcharts({
+                    chart: {
+                        type: 'bar'
+                    },
+                    title: {
+                        text: 'Passed and total candidate comparison'
+                    },
+                    subtitle: {
+                        text: 'From @ViewBag.FromDate to @ViewBag.ToDate'
+                    },
+
+                    xAxis: {
+                        categories: [
+                            @for (int i = 0; i < Model.Count; i++)
+                        {
+                            @Html.Raw("'"+@Model[i].Time+"'")
+                            if (i < Model.Count - 1)
+                            {
+                                @Html.Raw(",")
+                            }
+                        }
+                        ]
+                    },
+                    plotOptions: {
+                        series: {
+                            cursor: 'pointer',
+                            point: {
+                                events: {
+                                    click: function () {
+                                        var s=this.category;
+                                        window.location.href = '/Candidates/FilterCandidatesByDate?DateTaken='+this.category
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Amount of candidates'
+                        }
+                    },
+                    exporting: {
+                        buttons: {
+                            contextButton: {
+                                menuItems: [{
+                                    text: 'Print',
+                                    onclick: function () {
+                                        this.print();
+                                    }
+                                }, {
+                                    text: 'Save as PNG',
+                                    onclick: function () {
+                                        this.createCanvas();
+                                    },
+                                    separator: false
+                                }]
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Passed Candidates',
+                        data: [
+                            @for (int i = 0; i < Model.Count; i++)
+                        {
+                            @Html.Raw(@Model[i].Passed)
+                            if (i < Model.Count - 1)
+                            {
+                                @Html.Raw(",")
+                            }
+                        }
+                        ]
+                    }, {
+                        name: 'Total Candidates',
+                        data: [
+                            @for (int i = 0; i < Model.Count; i++)
+                                {
+                                 @Html.Raw(@Model[i].Total)
+                            if (i < Model.Count - 1)
+                            {
+                                @Html.Raw(",")
+                            }
+                        }
+                        ]
+                    }]
+                });
+            });
+        </script>
+    }
+}
+@section AutoCompleteJs{
+    <script src="~/Scripts/jquery-ui-1.10.4.custom.min.js"></script>
+    <script>
+        $(function () {
+            $("#FromDate").datepicker({
+                changeYear: true,
+                showAnim: "slideDown",
+                changeMonth: true,
+                numberOfMonths: 3,
+                maxDate: new Date(),
+                showWeek: true,
+                firstDay: 1,
+                onClose: function (selectedDate) {
+                    $("#ToDate").datepicker("option", "minDate", selectedDate);
+                }
+            });
+            $("#ToDate").datepicker({
+                changeYear: true,
+                showAnim: "slideDown",
+                changeMonth: true,
+                numberOfMonths: 3,
+                maxDate: new Date(),
+                showWeek: true,
+                firstDay: 1,
+                onClose: function (selectedDate) {
+                    $("#FromDate").datepicker("option", "maxDate", selectedDate);
+                }
+            });
+        });
+    </script>
+}
+
+@section AutoCompleteCss{
+    <link href="~/Content/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
+}
+<br />
+<h3>Statistics</h3>
+<hr />
+@using (Html.BeginForm("Index", "Statistics", FormMethod.Post, new { data_abide = "" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="large-4 columns">
+            <label>From Date:</label>
+            <input type="text" required pattern="month_day_year" id="FromDate" name="FromDate" value="@ViewBag.FromDate" readonly="readonly" />
+            <small class="error">Time is required</small>
+        </div>
+        <div class="large-4 columns">
+            <label>To Date:</label>
+            <input type="text" required pattern="month_day_year" id="ToDate" name="ToDate" value="@ViewBag.ToDate" readonly="readonly" />
+            <small class="error">Time is required</small>
+        </div>
+        <div class="large-4 columns">
+            <label>Filter by:</label>
+            <input type="radio" value="Day" name="Factor" id="FactorDay" @Selected(@ViewBag.Factor, "Day") /><label for="FactorDay">Day</label>
+            <input type="radio" value="Week" name="Factor" id="FactorWeek" @Selected(@ViewBag.Factor, "Week") /><label for="FactorWeek">Week</label>
+            <input type="radio" value="Month" name="Factor" id="FactorMonth" @Selected(@ViewBag.Factor, "Month") /><label for="FactorMonth">Month</label>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            <input type="submit" value="Submit" class="small button right" />
+        </div>
+    </div>
+}
+<div id="container"></div>

@@ -1,0 +1,148 @@
+﻿@model WebApplication5.Models.Question
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+    int i = 0;
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm("Create", "Questions", FormMethod.Post, new { data_abide = "" }))
+{
+    <div class="row">
+        <div class="large-12 columns">
+            @Html.AntiForgeryToken()
+            <h4>Question</h4>
+        </div>
+    </div>
+    <fieldset>
+        <legend>Detail</legend>
+        <div class="row">
+            <div class="large-12 columns">
+                <label>Question:</label>
+            </div>
+            <div class="large-12 columns">
+                @Html.TextAreaFor(model => model.Name, new { rows = "5", required = "" })
+                <small class="error">Name is required and must be a string</small>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 columns">
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label>Category:</label>
+                    </div>
+                    <div class="large-12 columns">
+                        @Html.DropDownList("CategoryId")
+                    </div>
+                </div>
+            </div>
+            <div class="large-6 columns">
+                <div class="row">
+                    <div class="large-12 columns">
+                        <label>Mark:</label>
+                    </div>
+                    <div class="large-12 columns">
+                        <select id="Mark" name="Mark">
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Answers</legend>
+        <div class="row">
+            <div class="large-6 columns">
+                <div class="row">
+                    <div class="large-1 columns">
+                        <input type="checkbox" value="true" id="Answers[0].IsRightAnswer" name="Answers[0].IsRightAnswer" />
+                        <input type="hidden" value="false" name="Answers[0].IsRightAnswer">
+                    </div>
+                    <div class="large-11 columns">
+                        <input type="text" id="Answers[0].Name" name="Answers[0].Name" />
+                    </div>
+                </div>
+            </div>
+            <div class="large-6 columns">
+                <div class="row">
+                    <div class="large-1 columns">
+                        <input type="checkbox" id="Answers[1].IsRightAnswer" name="Answers[1].IsRightAnswer" value="true" class="has-tip" title="Check if it is the correct answer" data-tooltip data-options="disable_for_touch:true" />
+                        <input type="hidden" value="false" name="Answers[1].IsRightAnswer">
+                    </div>
+                    <div class="large-11 columns">
+                        <input type="text" id="Answers[1].Name" name="Answers[1].Name" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 columns">
+                <div class="row">
+                    <div class="large-1 columns">
+                        <input type="checkbox" value="true" id="Answers[2].IsRightAnswer" name="Answers[2].IsRightAnswer" />
+                        <input type="hidden" value="false" name="Answers[2].IsRightAnswer" />
+                    </div>
+                    <div class="large-11 columns">
+                        <input type="text" id="Answers[2].Name" name="Answers[2].Name" />
+                    </div>
+                </div>
+            </div>
+            <div class="large-6 columns">
+                <div class="row">
+                    <div class="large-1 columns">
+                        <input type="checkbox" id="Answers[3].IsRightAnswer" name="Answers[3].IsRightAnswer" value="true" />
+                        <input type="hidden" value="false" name="Answers[3].IsRightAnswer">
+                    </div>
+                    <div class="large-11 columns">
+                        <input type="text" id="Answers[3].Name" name="Answers[3].Name" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="large-6 columns">
+                <div class="row">
+                    <div class="large-1 columns">
+                        <input type="checkbox" value="true" id="Answers[4].IsRightAnswer" name="Answers[4].IsRightAnswer" />
+                        <input type="hidden" value="false" name="Answers[4].IsRightAnswer">
+                    </div>
+                    <div class="large-11 columns">
+                        <input type="text" id="Answers[4].Name" name="Answers[4].Name" />
+                    </div>
+                </div>
+            </div>
+            <div class="large-6 columns">
+                <div class="row">
+                    <div class="large-1 columns">
+                        <input type="checkbox" id="Answers[5].IsRightAnswer" name="Answers[5].IsRightAnswer" value="true" />
+                        <input type="hidden" value="false" name="Answers[5].IsRightAnswer">
+                    </div>
+                    <div class="large-11 columns">
+                        <input type="text" id="Answers[5].Name" name="Answers[5].Name" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+    <input type="hidden" value="@DateTime.Now" id="DateCreated" name="DateCreated" />
+    <div class="row">
+        <div class="large-6 columns">
+            <a href="/Questions" class="small button">Back to List</a>
+        </div>
+        <div class="large-6 columns">
+            <input type="submit" value="Create" class="small button right" /><br />
+        </div>
+    </div>
+}
+@section Validation{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+}

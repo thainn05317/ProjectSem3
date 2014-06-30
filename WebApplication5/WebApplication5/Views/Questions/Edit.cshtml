@@ -1,0 +1,56 @@
+﻿@model WebApplication5.Models.Question
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@helper selected(int n, int m)
+{
+    if (n == m)
+    {
+        @:selected="selected"
+    }
+}
+<h2>Edit</h2>
+@using (Html.BeginForm("Edit", "Questions", FormMethod.Post, new { data_abide = "" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="row">
+        <div class="large-12 columns">
+            <label>Question Name:</label>
+            @Html.TextAreaFor(m => m.Name, new { rows = "5", required = "" })
+            <small class="error">Question content is required</small>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            <label>Category:</label>
+            @Html.DropDownList("CategoryId")
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-12 columns">
+            <label>Mark:</label>
+            <select id="Mark" name="Mark">
+                @for (int i = 1; i < 6; i++)
+                {
+                    <option value="@i" @selected(i, Model.Mark)>@i</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="large-6 columns">
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+        <div class="large-6 columns">
+            @Html.ActionLink("Edit the answers of this question", "Index", "Answers", new { QuestionId = @Model.Id }, new { @class = "right" })
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="large-12 columns">
+            <input type="submit" value="Save" class="small button right" />
+        </div>
+    </div>
+}

@@ -1,0 +1,55 @@
+﻿@using PagedList.Mvc
+@model PagedList.IPagedList<WebApplication5.Models.Candidate>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+@using (Ajax.BeginForm(new AjaxOptions { UpdateTargetId = "Sample", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }))
+{
+    <div class="row">
+        <div class="large-3 columns">
+            @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Enter your search here", id = "SearchString" })
+        </div>
+        <div class="large-2 columns">
+            <input type="submit" value="Search" class="small button postfix" />
+        </div>
+        <div class="large-7 columns"></div>
+    </div>
+}
+@Html.Partial("_CandidatePartial",Model)
+@section ResponsiveTableJs{
+    <script src="~/Scripts/responsive-tables.js"></script>
+}
+@section ResponsiveTable{
+    <link href="~/Content/responsive-tables.css" rel="stylesheet" />
+}
+@section Paging{
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+}
+@section Ajax{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}
+@section AutoCompleteJs{
+    <script src="~/Scripts/jquery-ui-1.10.4.custom.min.js"></script>
+}
+@section AutoCompleteCss{
+    <link href="~/Content/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
+}
+@section AutoScript{
+    <script>
+        $(function () {
+            $("#SearchString").autocomplete({
+                source: '@Url.Action("AutoComplete")'
+            });
+        });
+    </script>
+}
+
+

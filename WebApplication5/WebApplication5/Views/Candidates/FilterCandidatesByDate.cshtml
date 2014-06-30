@@ -1,0 +1,83 @@
+﻿@model IEnumerable<WebApplication5.Models.Candidate>
+@{
+    ViewBag.Title = "Candidates taken test on " + @ViewBag.Date;
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+<br />
+<h3>Candidates taken test on @ViewBag.Date</h3>
+<hr />
+
+<table class="responsive" style="width:100%">
+    <tr>
+        <th class="text-center">
+            <a href="#">Name</a>
+        </th>
+        <th class="text-center">
+            <a href="#">Address</a>
+        </th>
+        <th class="text-center">
+            <a href="#">Gender</a>
+        </th>
+        <th class="text-center">
+            <a href="#">Birthday</a>
+        </th>
+        <th class="text-center">
+            <a href="#">Email</a>
+        </th>
+        <th class="text-center">
+            <a href="#">Phone</a>
+        </th>
+        <th class="text-center">
+            <a href="#">Passed</a>
+        </th>
+        <th class="text-center">
+            <a href="#">Date Taken</a>
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HomeAddress)
+            </td>
+            @if (item.Gender)
+            {
+                <td class="text-center">M</td>
+            }
+            else
+            {
+                <td class="text-center">F</td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.Birthday)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Passed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateTaken)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+</table>
+@section ResponsiveTableJs{
+    <script src="~/Scripts/responsive-tables.js"></script>
+}
+@section ResponsiveTable{
+    <link href="~/Content/responsive-tables.css" rel="stylesheet" />
+}

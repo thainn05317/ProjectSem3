@@ -1,0 +1,115 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<WebApplication5.Models.Question>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+@section ResponsiveTable{
+    <link href="~/Content/responsive-tables.css" rel="stylesheet" />
+}
+@section Paging{
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+}
+<h3>Question Management</h3>
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<ul class="tabs" data-tab>
+    <li class="tab-title active"><a href="#panel2-1">Basic Search</a></li>
+    <li class="tab-title"><a href="#panel2-2">Advanced Search</a></li>
+</ul>
+<div class="tabs-content">
+    <div class="content active" id="panel2-1">
+        <div class="content active" id="panel2-1">
+            @using (Ajax.BeginForm(new AjaxOptions { UpdateTargetId = "Sample", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }))
+            {
+                <div class="row">
+                    <div class="large-5 columns">
+                        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Enter your search here", id = "SearchString" })
+                    </div>
+                    <div class="large-2 columns">
+                        <input type="submit" value="Search" class="small button postfix " />
+                    </div>
+                    <div class="large-5 columns"></div>
+                </div>
+            }
+        </div>
+
+    </div>
+    <div class="content" id="panel2-2">
+        @using (Ajax.BeginForm(new AjaxOptions { UpdateTargetId = "Sample", HttpMethod = "GET", InsertionMode = InsertionMode.Replace }))
+        {
+            <div class="row">
+                <div class="large-3 columns">
+                    <label>Question Name:</label>
+                    @Html.TextBox("AdvancedSearchString", ViewBag.CurrentFilter as string, new { @placeholder = "Enter your search here", id = "AdvancedSearchString" })
+                </div>
+                <div class="large-3 columns">
+                    <label>Question Type:</label>
+                    <select id="CategoryId" name="CategoryId">
+                        <option value="null">---All---</option>
+                        <option value="1">General Knowledge</option>
+                        <option value="2">Mathematics</option>
+                        <option value="3">Computer Technology</option>
+                    </select>
+                </div>
+                <div class="large-3 columns">
+                    <label>Mark:</label>
+                    <select id="Mark" name="Mark">
+                        <option value="null">---All---</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div class="large-3 columns">
+                    <label>Date Created:</label>
+                    <input type="datetime" id="DateCreated" name="DateCreated" value="" readonly="readonly" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="large-12 columns">
+                    <input type="submit" class="small button right" value="Search" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@Html.Partial("_QuestionPartial", Model)
+@section ResponsiveTableJs{
+    <script src="~/Scripts/responsive-tables.js"></script>
+}
+@section Ajax{
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}
+@section AutoCompleteJs{
+    <script src="~/Scripts/jquery-ui-1.10.4.custom.min.js"></script>
+}
+@section AutoCompleteCss{
+    <link href="~/Content/jquery-ui-1.10.4.custom.min.css" rel="stylesheet" />
+}
+@section AutoScript{
+    <script>
+        $(function () {
+            $("#SearchString").autocomplete({
+                source: '@Url.Action("AutoComplete")'
+            });
+        });
+    </script>
+}
+@section DatePicker{
+    <script>
+        $(function () {
+            $("#DateCreated").datepicker({
+                changeYear: true,
+                showAnim: "slideDown",
+                maxDate: new Date()
+            });
+        });
+    </script>
+}
+

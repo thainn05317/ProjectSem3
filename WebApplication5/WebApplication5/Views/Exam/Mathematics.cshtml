@@ -1,0 +1,97 @@
+﻿@using WebApplication5.Models
+@model IList<WebApplication5.Models.Question>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_HomeLayoutPage.cshtml";
+    Random rd = new Random();
+}
+<div class="row">
+    <div class="large-12 columns">
+        <h3>Mathematics</h3>
+    </div>
+</div>
+<div class="row">
+    <div class="large-5 large-centered columns">
+        <div class="clock has-tip" title="Your time left">
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="large-12 columns">
+        @using (Html.BeginForm("Mathematics", "Exam", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            for (int i = 0; i < Model.Count; i++)
+            {
+                <hr />
+                <input type="hidden" value="@Model[i].Id" id="Results[@i].Id" name="Results[@i].Id" />
+                <div class="row">
+                    <div class="large-10 columns">
+                        <h5>@(i + 1).&nbsp;&nbsp;&nbsp;&nbsp;@Model[i].Name</h5>
+                    </div>
+                    <div class="large-2 columns">
+                        <h6 class="right">(@Model[i].Mark Marks)</h6>
+                    </div>
+                </div>
+                List<Answer> list = Model[i].Answers.ToList();
+                for (int j = 0; j < list.Count; j++)
+                {
+                    int m = rd.Next(list.Count);
+                    Answer temp = list[j];
+                    list[j] = list[m];
+                    list[m] = temp;
+                }
+                for (int n = 0; n < list.Count; n++)
+                {
+                    <input type="hidden" value="@list[n].Id" id="Results[@i].UserAnswers[@n].AnswerId" name="Results[@i].UserAnswers[@n].AnswerId" />
+                    <input type="hidden" value="@Model[i].Id" id="Results[@i].UserAnswers[@n].QuestionId" name="Results[@i].UserAnswers[@n].QuestionId" />
+                    <div class="row">
+                        <div class="large-12 columns">
+                            <input type="checkbox" value="true" name="Results[@i].UserAnswers[@n].Checked" /><label for="Results[@i].UserAnswers[@n].Checked"><h6>&nbsp;&nbsp;@list[n].Name</h6></label>
+                            <input type="hidden" value="false" name="Results[@i].UserAnswers[@n].Checked" />
+                        </div>
+                    </div>
+                }
+            }
+            <div class="row">
+                <div class="large-12 columns">
+                    <input type="submit" value="Submit" class="small button right" id="Submit" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@section ClockCss{
+    <link href="~/Content/flipclock.css" rel="stylesheet" />
+}
+@section ClockJs{
+    <script src="~/Scripts/flipclock.js"></script>
+}
+@section ClockInit{
+    <script>
+        $(document).ready(function () {
+            var clock = $('.clock').FlipClock(300, {
+                clockFace: 'MinuteCounter',
+                countdown: true,
+                callbacks: {
+                    stop: function () {
+                        $("form").submit();
+                    }
+                }
+            });
+        });
+    </script>
+}
+@section LeaveConfirmation{
+    <script>
+        document.getElementById("Submit").onclick = function () {
+            window.btn_Clicked = true;
+        }
+        window.onbeforeunload = function () {
+            if (!window.btn_Clicked) {
+                return 'You will lose everything if you want to leave this page. Are you sure you want to leave?';
+            }
+        }
+    </script>
+}
